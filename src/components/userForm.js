@@ -1,26 +1,25 @@
 import { FormControl, MenuItem, Select, TextField } from '@mui/material';
 import FormGroup from '@mui/material/FormGroup';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './design/userForm.css';
 import axios from 'axios';
 
 
 
 export const UserForm = () => {
+    const [posts, setPosts] = useState([]);
+    const client = axios.create({
+       baseURL: "http://localhost:16079/api/User/getUser" 
+    });
+    useEffect(() => {
+        client.get('?_limit=10').then((response) => {
+           setPosts(response.data);
+        });
+     }, []);
 
-    axios.get('http://localhost:16079/api/User/getUser')
-  .then(response => {
-    // טיפול בתוצאה
-    console.log(response.data);
-  })
-  .catch(error => {
-    // טיפול בשגיאה
-    console.error('שגיאה בשליחת בקשה:', error);
-  });
+console.log(posts)
+console.log(posts.idUser)
 
-  fetch('http://localhost:16079/api/User/getUser')
-   .then(response => response.json())
-   .then(data => console.log(data));
     const [age, setAge] = React.useState('');
 
     const handleChange = (event) => {
@@ -31,7 +30,7 @@ export const UserForm = () => {
         <div className="divForm"> 
         <h2 className='userForm'>user form</h2>
             <FormControl>
-                <TextField required margin="normal" className="custom-textfield" id="lname" label="שם משפחה" variant="outlined" />
+                <TextField required margin="normal" className="custom-textfield" id="lname" label={"שם משפחה"} variant="outlined" />
                 <TextField required margin="normal" className="custom-textfield" id="fname1" label="שם פרטי 1" variant="outlined" />
                 <TextField margin="normal" className="custom-textfield" id="outlined-basic" label="שם פרטי 2" variant="outlined" />
                 <TextField required margin="normal" className="custom-textfield" id="outlined-basic" label="תעודת זהות 1" variant="outlined" />
